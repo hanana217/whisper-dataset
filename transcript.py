@@ -2,9 +2,8 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import json
 from pathlib import Path
 
-# ===================== CONFIG =====================
-youtube_id = "GMNzJHdZxcU"    # ← YouTube video ID
-output_dir = "."               # ← where to save transcript.json
+youtube_id = "video_id"   
+output_dir = "."               
 # ==================================================
 
 api = YouTubeTranscriptApi()
