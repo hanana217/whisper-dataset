@@ -1,0 +1,27 @@
+# ─── Audio download ───────────────────────────────────────────────────────────
+yt-dlp
+
+# ─── Audio processing ─────────────────────────────────────────────────────────
+soundfile
+pydub
+numpy
+demucs
+
+# ─── Transcription ────────────────────────────────────────────────────────────
+youtube-transcript-api
+
+# ─── Segmentation & data handling ─────────────────────────────────────────────
+pandas
+
+# ─── Hugging Face upload ──────────────────────────────────────────────────────
+datasets
+huggingface_hub
+
+# ─── PyTorch (required by demucs) ─────────────────────────────────────────────
+# Install the correct version for your system from https://pytorch.org/get-started/locally/
+# Example for CPU-only:
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+# Example for CUDA 12.1:
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+torch
+torchaudio
