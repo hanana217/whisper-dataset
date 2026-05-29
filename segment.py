@@ -5,31 +5,27 @@ import pandas as pd
 from pathlib import Path
 from pydub import AudioSegment
 
-# ===================== CONFIG =====================
-video_id        = "output_23"
-audio_filename  = f"{video_id}.wav"
-transcript_file = "GMNzJHdZxcU_transcript.json"
+audio_name        = "output_name"
+audio_filename  = f"{audio_name}.wav"
+transcript_file = "video-ID_transcript.json"
 segment_sec     = 5
 # ==================================================
 
-base_dir     = Path(video_id)
+base_dir     = Path(audio_name)
 segments_dir = base_dir / "segments"
 base_dir.mkdir(exist_ok=True)
 segments_dir.mkdir(exist_ok=True)
 
-# ── Load transcript ────────────────────────────────────────────
 print(f"📄 Loading transcript: {transcript_file}")
 with open(transcript_file, "r", encoding="utf-8") as f:
     chunks = json.load(f)
 print(f"   {len(chunks)} chunks loaded")
 
-# ── Load audio ────────────────────────────────────────────────
 print(f"\n🎵 Loading audio: {audio_filename}")
 audio     = AudioSegment.from_wav(audio_filename)
 total_sec = len(audio) / 1000
 print(f"   Duration: {total_sec:.1f}s")
 
-# ── Align transcript to segment ────────────────────────────────
 def get_text_for_segment(seg_start, seg_end, chunks):
     texts = []
     for chunk in chunks:
@@ -43,7 +39,6 @@ def get_text_for_segment(seg_start, seg_end, chunks):
             texts.append(chunk["text"])
     return " ".join(texts).strip()
 
-# ── Segment + align ────────────────────────────────────────────
 print(f"\n✂️  Segmenting + aligning...\n")
 segments = []
 start_ms = 0
@@ -53,7 +48,7 @@ while start_ms < len(audio):
     end_ms   = min(start_ms + segment_sec * 1000, len(audio))
     seg_clip = audio[start_ms:end_ms]
 
-    filename = segments_dir / f"{video_id}_seg_{seg_idx:04d}.wav"
+    filename = segments_dir / f"{audio_name}_seg_{seg_idx:04d}.wav"
 
     # Save using soundfile (avoids torchaudio/torchcodec on Windows)
     samples = np.array(seg_clip.get_array_of_samples(), dtype=np.float32)
@@ -80,10 +75,9 @@ while start_ms < len(audio):
     start_ms += segment_sec * 1000
     seg_idx  += 1
 
-# ── Save CSV ──────────────────────────────────────────────────
 df       = pd.DataFrame(segments)
 df       = df[["file_name", "sentence"]]
-csv_path = base_dir / f"{video_id}_metadata.csv"
+csv_path = base_dir / f"{audio_name}_metadata.csv"
 df.to_csv(csv_path, index=False, encoding="utf-8-sig")
 
 empty  = df[df["sentence"] == ""]
