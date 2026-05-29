@@ -23,7 +23,6 @@ try:
 except Exception as e:
     print(f"⚠️  Could not patch torchaudio: {e}")
 
-# ===================== CONFIG =====================
 DATASET_ROOT = "."     
 all_wavs = sorted(glob.glob("/segments/*.wav", recursive=False))
 print(f"🔍 Found {len(all_wavs)} WAV files across all segments folders\n")
